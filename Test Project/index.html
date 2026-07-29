@@ -32,12 +32,12 @@
      a printed card rather than a generic web template.
      ============================================================ */
   :root {
-    --ink:        #1F2C29;   /* deep ink green — headings, primary text */
-    --brass:      #A9822F;   /* warm brass accent — business name, ring, links */
-    --paper:      #FAF8F4;   /* warm paper background for the page */
-    --card:       #FFFFFF;   /* the card surface itself */
-    --muted:      #6B7570;   /* soft muted text for tagline / labels */
-    --hairline:   #E4E0D8;   /* thin divider lines */
+    --ink:        #F4D03F;   /* yellow text */
+    --brass:      #F4D03F;   /* yellow accent */
+    --paper:      #FFFFFF;   /* white page background */
+    --card:       #4B4FD6;   /* indigo-blue card surface */
+    --muted:      #F4D03F;   /* yellow muted text */
+    --hairline:   #F4D03F;   /* yellow divider lines */
 
     --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
     --font-body:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -63,11 +63,7 @@
   body {
     font-family: var(--font-body);
     background: var(--paper);
-    /* very subtle paper grain using layered radial gradients — 
-       keeps the background from feeling flat/default white */
-    background-image:
-      radial-gradient(circle at 20% 20%, rgba(31,44,41,0.03), transparent 40%),
-      radial-gradient(circle at 80% 80%, rgba(169,130,47,0.05), transparent 40%);
+    background-image: none;
     color: var(--ink);
     min-height: 100vh;
 
@@ -87,6 +83,7 @@
     width: 100%;
     max-width: 400px;
     background: var(--card);
+    border: 2px solid var(--hairline);
     border-radius: 24px;
     box-shadow:
       0 1px 2px rgba(31, 44, 41, 0.04),
