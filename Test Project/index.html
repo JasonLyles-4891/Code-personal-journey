@@ -1,15 +1,423 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My First Page</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[Jason Lyles] — NEW WAY ESSENTIALS LLC]</title>
+
+<!--
+  ============================================================
+  DIGITAL BUSINESS CARD — how this file is organized
+  ============================================================
+  1. <style>  → all CSS, using a small set of CSS custom
+     properties ("design tokens") at the top so the whole
+     palette/type system can be changed in one place.
+  2. <body>   → semantic HTML5 (header / main / section / footer)
+  3. <script> → tiny bit of JS for a load-in animation and a
+     "copied to clipboard" confirmation on the phone number.
+
+  HOW TO PERSONALIZE:
+  - Replace the [bracketed] text with your real details.
+  - Replace the two placeholder image URLs with your own
+    photo/logo (see the comments above each <img> tag).
+  ============================================================
+-->
+
+<style>
+  /* ============================================================
+     DESIGN TOKENS
+     A tiny "print stationery" palette: deep ink green, warm
+     brass accent, soft paper background. Keeping this to three
+     colors (+ white/black neutrals) keeps the card feeling like
+     a printed card rather than a generic web template.
+     ============================================================ */
+  :root {
+    --ink:        #1F2C29;   /* deep ink green — headings, primary text */
+    --brass:      #A9822F;   /* warm brass accent — business name, ring, links */
+    --paper:      #FAF8F4;   /* warm paper background for the page */
+    --card:       #FFFFFF;   /* the card surface itself */
+    --muted:      #6B7570;   /* soft muted text for tagline / labels */
+    --hairline:   #E4E0D8;   /* thin divider lines */
+
+    --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+    --font-body:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono:    'IBM Plex Mono', 'Courier New', monospace;
+  }
+
+  /* Import display + body + mono typefaces (Google Fonts) */
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  /* ============================================================
+     RESET / BASE
+     ============================================================ */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html, body {
+    height: 100%;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--paper);
+    /* very subtle paper grain using layered radial gradients — 
+       keeps the background from feeling flat/default white */
+    background-image:
+      radial-gradient(circle at 20% 20%, rgba(31,44,41,0.03), transparent 40%),
+      radial-gradient(circle at 80% 80%, rgba(169,130,47,0.05), transparent 40%);
+    color: var(--ink);
+    min-height: 100vh;
+
+    /* Center the card both horizontally and vertically */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 20px;
+  }
+
+  /* ============================================================
+     CARD CONTAINER
+     Card-style container: rounded corners + soft shadow,
+     centered on the page background.
+     ============================================================ */
+  .card {
+    width: 100%;
+    max-width: 400px;
+    background: var(--card);
+    border-radius: 24px;
+    box-shadow:
+      0 1px 2px rgba(31, 44, 41, 0.04),
+      0 20px 40px -12px rgba(31, 44, 41, 0.18);
+    padding: 48px 36px 36px;
+    text-align: center;
+
+    /* small entrance animation, triggered via JS by adding .is-visible */
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .card.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ============================================================
+     1. PROFILE PHOTO
+     Circular image, centered, ~150px, subtle ring + shadow
+     ============================================================ */
+  .profile-photo-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+
+  .profile-photo {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--paper);
+    outline: 2px solid var(--brass); /* the "subtle ring" */
+    outline-offset: 4px;
+    box-shadow: 0 8px 20px rgba(31, 44, 41, 0.15);
+  }
+
+  /* ============================================================
+     2. NAME (H1) + 3. BUSINESS NAME (H2) + 4. TAGLINE
+     ============================================================ */
+  .name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.6rem, 5vw, 2rem);
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+
+  .business-name {
+    margin-top: 6px;
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--brass);
+  }
+
+  .tagline {
+    margin-top: 14px;
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 0.95rem;
+    color: var(--muted);
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  /* thin divider between the header block and the logo/contact block */
+  .divider {
+    width: 40px;
+    height: 1px;
+    background: var(--hairline);
+    margin: 28px auto;
+  }
+
+  /* ============================================================
+     5. LOGO SECTION
+     A separate, smaller image placeholder for the brand logo
+     ============================================================ */
+  .logo-section {
+    margin-bottom: 28px;
+  }
+
+  .logo-img {
+    width: 64px;
+    height: 64px;
+    border-radius: 14px;
+    object-fit: cover;
+    box-shadow: 0 4px 10px rgba(31, 44, 41, 0.12);
+  }
+
+  .logo-caption {
+    margin-top: 10px;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ============================================================
+     6. CONTACT INFO
+     ============================================================ */
+  .contact {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--ink);
+    text-decoration: none;
+    padding: 10px 16px;
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
+    transition: border-color 0.25s ease, color 0.25s ease, background 0.25s ease, transform 0.15s ease;
+  }
+
+  /* Subtle hover effect on contact links */
+  .contact-link:hover,
+  .contact-link:focus-visible {
+    border-color: var(--brass);
+    color: var(--brass);
+    background: rgba(169, 130, 47, 0.06);
+    transform: translateY(-1px);
+  }
+
+  .contact-link:active {
+    transform: translateY(0);
+  }
+
+  .contact-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    fill: currentColor;
+  }
+
+  /* small "copied" toast shown briefly when the phone number is tapped */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    padding: 10px 18px;
+    border-radius: 999px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* ============================================================
+     FOOTER
+     ============================================================ */
+  footer {
+    margin-top: 28px;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    color: var(--hairline);
+  }
+
+  /* ============================================================
+     RESPONSIVE / MOBILE-FRIENDLY ADJUSTMENTS
+     ============================================================ */
+  @media (max-width: 420px) {
+    .card {
+      padding: 40px 24px 28px;
+      border-radius: 20px;
+    }
+    .profile-photo {
+      width: 120px;
+      height: 120px;
+    }
+  }
+
+  /* Respect users who prefer reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .card,
+    .contact-link,
+    .toast {
+      transition: none;
+    }
+  }
+</style>
 </head>
+
 <body>
-  <h1>Jason Lyles</h1>
-  <p>Welcome to my simple webpage!</p>
-  <p>This is a paragraph added to the webpage.</p>
-  <script src="script.js"></script>
+
+  <!-- MAIN CARD: everything lives inside this single centered card -->
+  <div class="card" id="businessCard">
+
+    <!-- ==================== HEADER ====================
+         Contains the profile photo, name, business name, and tagline -->
+    <header>
+
+      <!-- 1. PROFILE PHOTO — replace the src with your own photo URL -->
+      <div class="profile-photo-wrap">
+        <img
+          class="profile-photo"
+          src="image/ProfilePicture.png"
+          alt="Portrait photo of [Your Full Name]"
+          width="150"
+          height="150"
+        >
+      </div>
+
+      <!-- 2. NAME — main H1 heading -->
+      <h1 class="name">Jason Lyles</h1>
+
+      <!-- 3. BUSINESS NAME — H2 subheading, directly below the name -->
+      <h2 class="business-name">NEW WAY ESSENTIALS LLC</h2>
+
+      <!-- 4. TAGLINE — smaller, lighter supporting text -->
+      <p class="tagline">[CLEANER SPACES BETTER PLACES]</p>
+
+    </header>
+
+    <div class="divider" aria-hidden="true"></div>
+
+    <!-- ==================== MAIN CONTENT ====================
+         Logo section + contact info -->
+    <main>
+
+      <!-- 5. LOGO SECTION — a separate image placeholder for your brand logo -->
+      <section class="logo-section" aria-label="Brand logo">
+        <img
+          class="logo-img"
+          src="image/NWE.png"
+          alt="[Your Side Hustle Name] logo"
+          width="80"
+          height="80"
+        >
+        <p class="logo-caption">Brand</p>
+      </section>
+
+      <!-- 6. CONTACT INFO -->
+      <section class="contact" aria-label="Contact information">
+
+        <!-- Phone: click-to-call link, and JS below copies it on click -->
+        <a class="contact-link" href="tel:+19313236373" id="phoneLink">
+          <svg class="contact-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.4 0 .8-.2 1L6.6 10.8z"/>
+          </svg>
+          <span>931-323-6373</span>
+        </a>
+
+        <!-- Email: clickable mailto link -->
+        <a class="contact-link" href="mailto:newwayessentials3@gmail.com">
+          <svg class="contact-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zm0 2v.01L12 13l8-6.99V6H4zm0 2.24V18h16V8.24l-8 7-8-7z"/>
+          </svg>
+          <span>newwayessentials3@gmail.com</span>
+        </a>
+
+      </section>
+
+    </main>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer>
+      &mdash; digital business card &mdash;
+    </footer>
+
+  </div>
+
+  <!-- toast shown when the phone number link is clicked -->
+  <div class="toast" id="toast">Tap to call — number copied</div>
+
+<script>
+  /* ============================================================
+     JAVASCRIPT
+     Two small, purely optional enhancements:
+     1. Fade/slide the card in once the page has loaded.
+     2. Copy the phone number to the clipboard when it's tapped,
+        and show a brief confirmation toast (nice on mobile,
+        where "tel:" links open a dialer app).
+     ============================================================ */
+
+  // 1. Entrance animation: add the .is-visible class after load
+  window.addEventListener('DOMContentLoaded', () => {
+    const card = document.getElementById('businessCard');
+    // small delay so the transition is noticeable
+    requestAnimationFrame(() => {
+      setTimeout(() => card.classList.add('is-visible'), 50);
+    });
+  });
+
+  // 2. Copy phone number + show toast on click
+  const phoneLink = document.getElementById('phoneLink');
+  const toast = document.getElementById('toast');
+  let toastTimer;
+
+  phoneLink.addEventListener('click', () => {
+    const number = phoneLink.querySelector('span').textContent;
+
+    // Try to copy to clipboard (works on https / localhost)
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(number).catch(() => {
+        /* clipboard permissions can fail silently — no big deal,
+           the tel: link still works on its own */
+      });
+    }
+
+    // Show the toast briefly
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      toast.classList.remove('show');
+    }, 1800);
+  });
+</script>
+
 </body>
 </html>
