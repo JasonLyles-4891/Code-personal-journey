@@ -62,7 +62,7 @@
 
   body {
     font-family: var(--font-body);
-    background: var(--paper);
+    background: #2f2f2f;
     background-image: none;
     color: var(--ink);
     min-height: 100vh;
@@ -71,7 +71,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 32px 20px;
+    padding: 48px 20px;
   }
 
   /* ============================================================
@@ -81,14 +81,15 @@
      ============================================================ */
   .card {
     width: 100%;
-    max-width: 400px;
+    max-width: 440px;
+    min-height: 560px;
     background: var(--card);
-    border: 2px solid var(--hairline);
+    border: 2px solid rgba(244, 208, 63, 0.85);
     border-radius: 24px;
     box-shadow:
-      0 1px 2px rgba(31, 44, 41, 0.04),
-      0 20px 40px -12px rgba(31, 44, 41, 0.18);
-    padding: 48px 36px 36px;
+      0 10px 30px rgba(0, 0, 0, 0.24),
+      0 30px 60px -24px rgba(0, 0, 0, 0.30);
+    padding: 64px 32px 40px;
     text-align: center;
 
     /* small entrance animation, triggered via JS by adding .is-visible */
@@ -109,14 +110,19 @@
   .profile-photo-wrap {
     display: flex;
     justify-content: center;
-    margin-bottom: 24px;
+    margin: 16px auto 24px;
+    padding: 12px;
+    background: rgba(244, 208, 63, 0.12);
+    border-radius: 50%;
   }
 
   .profile-photo {
-    width: 150px;
-    height: 150px;
+    width: 140px;
+    height: 140px;
+    max-width: 100%;
     border-radius: 50%;
-    object-fit: cover;
+    object-fit: contain;
+    background: var(--paper);
     border: 4px solid var(--paper);
     outline: 2px solid var(--brass); /* the "subtle ring" */
     outline-offset: 4px;
@@ -182,11 +188,12 @@
   }
 
   .qr-container {
-    width: 150px;
-    height: 150px;
+    width: 170px;
+    height: 170px;
     display: grid;
     place-items: center;
-    border-radius: 18px;
+    padding: 10px;
+    border-radius: 20px;
     background: rgba(244, 208, 63, 0.16);
     box-shadow: inset 0 0 0 1px rgba(11, 31, 93, 0.15);
   }
@@ -223,11 +230,12 @@
     gap: 8px;
     font-family: var(--font-mono);
     font-size: 0.9rem;
-    color: var(--ink);
+    color: var(--brass);
     text-decoration: none;
     padding: 10px 16px;
-    border: 1px solid var(--hairline);
+    border: 1px solid rgba(244, 208, 63, 0.75);
     border-radius: 999px;
+    background: rgba(244, 208, 63, 0.12);
     transition: border-color 0.25s ease, color 0.25s ease, background 0.25s ease, transform 0.15s ease;
   }
 
@@ -236,7 +244,7 @@
   .contact-link:focus-visible {
     border-color: var(--brass);
     color: var(--brass);
-    background: rgba(169, 130, 47, 0.06);
+    background: rgba(244, 208, 63, 0.22);
     transform: translateY(-1px);
   }
 
@@ -277,7 +285,7 @@
      FOOTER
      ============================================================ */
   footer {
-    margin-top: 28px;
+    margin-top: 16px;
     font-family: var(--font-mono);
     font-size: 0.7rem;
     letter-spacing: 0.06em;
@@ -289,12 +297,12 @@
      ============================================================ */
   @media (max-width: 420px) {
     .card {
-      padding: 40px 24px 28px;
+      padding: 48px 24px 32px;
       border-radius: 20px;
     }
     .profile-photo {
-      width: 120px;
-      height: 120px;
+      width: 130px;
+      height: 130px;
     }
   }
 
