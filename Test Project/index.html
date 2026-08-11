@@ -32,12 +32,12 @@
      a printed card rather than a generic web template.
      ============================================================ */
   :root {
-    --ink:        #F4D03F;   /* yellow text */
-    --brass:      #F4D03F;   /* yellow accent */
+    --ink:        #F4D03F;   /* gold text */
+    --brass:      #F4D03F;   /* gold accent */
     --paper:      #FFFFFF;   /* white page background */
-    --card:       #4B4FD6;   /* indigo-blue card surface */
-    --muted:      #F4D03F;   /* yellow muted text */
-    --hairline:   #F4D03F;   /* yellow divider lines */
+    --card:       #0B1F5D;   /* navy blue card surface */
+    --muted:      #F4D03F;   /* gold muted text */
+    --hairline:   #F4D03F;   /* gold divider lines */
 
     --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
     --font-body:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -164,28 +164,47 @@
   }
 
   /* ============================================================
-     5. LOGO SECTION
-     A separate, smaller image placeholder for the brand logo
+     5. QR CODE SECTION
+     Replaces the logo section with a vCard QR code for saving
+     contact details on a phone.
      ============================================================ */
   .logo-section {
-    margin-bottom: 28px;
+    margin: 28px auto 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    background: rgba(244, 208, 63, 0.10);
+    border: 1px solid rgba(244, 208, 63, 0.25);
+    border-radius: 22px;
+    padding: 18px 14px 16px;
+    max-width: 220px;
   }
 
-  .logo-img {
-    width: 64px;
-    height: 64px;
-    border-radius: 14px;
-    object-fit: cover;
-    box-shadow: 0 4px 10px rgba(31, 44, 41, 0.12);
+  .qr-container {
+    width: 150px;
+    height: 150px;
+    display: grid;
+    place-items: center;
+    border-radius: 18px;
+    background: rgba(244, 208, 63, 0.16);
+    box-shadow: inset 0 0 0 1px rgba(11, 31, 93, 0.15);
+  }
+
+  .qr-container canvas,
+  .qr-container img {
+    width: 150px;
+    height: 150px;
+    display: block;
   }
 
   .logo-caption {
-    margin-top: 10px;
+    margin-top: 0;
     font-family: var(--font-mono);
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--muted);
+    color: var(--ink);
   }
 
   /* ============================================================
@@ -317,7 +336,7 @@
       <h2 class="business-name">NEW WAY ESSENTIALS LLC</h2>
 
       <!-- 4. TAGLINE — smaller, lighter supporting text -->
-      <p class="tagline">[CLEANER SPACES BETTER PLACES]</p>
+      <p class="tagline">CLEANER SPACES BETTER PLACES</p>
 
     </header>
 
@@ -327,19 +346,7 @@
          Logo section + contact info -->
     <main>
 
-      <!-- 5. LOGO SECTION — a separate image placeholder for your brand logo -->
-      <section class="logo-section" aria-label="Brand logo">
-        <img
-          class="logo-img"
-          src="image/NWE.png"
-          alt="[Your Side Hustle Name] logo"
-          width="80"
-          height="80"
-        >
-        <p class="logo-caption">Brand</p>
-      </section>
-
-      <!-- 6. CONTACT INFO -->
+        <!-- 6. CONTACT INFO -->
       <section class="contact" aria-label="Contact information">
 
         <!-- Phone: click-to-call link, and JS below copies it on click -->
@@ -360,6 +367,14 @@
 
       </section>
 
+      <!-- 5. QR CODE SECTION — replaces the logo section with a shareable vCard QR code -->
+      <section class="logo-section" aria-label="QR code to save contact">
+        <div class="qr-container">
+          <div id="qrCode" class="qr-code" aria-label="scan to save contact"></div>
+        </div>
+        <p class="logo-caption">Scan to save my contact.</p>
+      </section>
+
     </main>
 
     <!-- ==================== FOOTER ==================== -->
@@ -371,6 +386,9 @@
 
   <!-- toast shown when the phone number link is clicked -->
   <div class="toast" id="toast">Tap to call — number copied</div>
+
+  <!-- QR code library loaded client-side so vCard generation works without an external API -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-ZcjKvpnxE4xy4Ew1b4oSyxMc/Spo7H1yIVDZmXbOsyZASPHwJLrp7Uw5UqEAA9+3t8h326CNrAg+fAGkE5Dd3A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script>
   /* ============================================================
@@ -389,6 +407,28 @@
     requestAnimationFrame(() => {
       setTimeout(() => card.classList.add('is-visible'), 50);
     });
+
+    // 3. Render the vCard QR code once the DOM and library are ready
+    if (window.QRCode) {
+      const vCard = [
+        'BEGIN:VCARD',
+        'VERSION:3.0',
+        'FN:Jason Lyles',
+        'ORG:New Way Essentials LLC',
+        'TEL;TYPE=WORK,VOICE:+19313236373',
+        'EMAIL:newwayessentials3@gmail.com',
+        'END:VCARD'
+      ].join('\n');
+
+      new QRCode(document.getElementById('qrCode'), {
+        text: vCard,
+        width: 150,
+        height: 150,
+        colorDark: '#0B1F5D',
+        colorLight: '#F4D03F',
+        correctLevel: QRCode.CorrectLevel.H
+      });
+    }
   });
 
   // 2. Copy phone number + show toast on click
