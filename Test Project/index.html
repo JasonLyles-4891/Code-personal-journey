@@ -396,7 +396,7 @@
   <div class="toast" id="toast">Tap to call — number copied</div>
 
   <!-- QR code library loaded client-side so vCard generation works without an external API -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-ZcjKvpnxE4xy4Ew1b4oSyxMc/Spo7H1yIVDZmXbOsyZASPHwJLrp7Uw5UqEAA9+3t8h326CNrAg+fAGkE5Dd3A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script>
   /* ============================================================
@@ -421,8 +421,10 @@
       const vCard = [
         'BEGIN:VCARD',
         'VERSION:3.0',
+        'N:Lyles;Jason;;;',
         'FN:Jason Lyles',
         'ORG:New Way Essentials LLC',
+        'TITLE:Owner',
         'TEL;TYPE=WORK,VOICE:+19313236373',
         'EMAIL:newwayessentials3@gmail.com',
         'END:VCARD'
